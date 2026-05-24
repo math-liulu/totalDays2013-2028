@@ -4,34 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2013-2028 年月日探究互动年历</title>
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Tailwind 配置 -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#0A7D6A',
-            secondary: '#60A09A',
-            accent: '#FF6B42',
-            bgLight: '#D8FBF7',
-            bgCard: '#D3E0E9',
-            textDark: '#0D2622',
-            bigMonth: '#FF6B42',
-            smallMonth: '#A1CAF9',
-            febMonth: '#CDAEFB'
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Anime.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-
   <style>
     * {
       margin: 0;
@@ -190,6 +163,35 @@
       border: 2px solid #B91C1C;
     }
 
+    .type-cell {
+      background: #F3F4F6;
+      color: #6B7280;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .type-cell:hover {
+      background: #E5E7EB !important;
+      transform: scale(1.05) !important;
+    }
+
+    .type-cell.revealed {
+      background: #FFFFFF;
+    }
+
+    .type-cell.leap-year {
+      color: #EF4444;
+      border: 2px solid #EF4444;
+      background: #FEF2F2;
+    }
+
+    .type-cell.common-year {
+      color: #10B981;
+      border: 2px solid #10B981;
+      background: #ECFDF5;
+    }
+
     .calendar-table td {
       padding: 1.2rem;
       text-align: center;
@@ -225,7 +227,6 @@
       color: #4A90E2;
     }
 
-    /* 2月单元格基础样式 */
     .day-cell.feb-cell {
       background: #F8F0FF;
       color: #9B59B6;
@@ -233,8 +234,8 @@
       font-size: 1.5rem;
     }
 
-    /* 默认状态下 28 和 29 保持一致，不加框 */
-    .day-cell.feb-28, .day-cell.feb-29 {
+    .day-cell.feb-28,
+    .day-cell.feb-29 {
       background: #F8F0FF;
       color: #9B59B6;
     }
@@ -319,8 +320,8 @@
       box-shadow: 0 12px 24px rgba(0,0,0,0.15);
     }
 
-    .stat-btn[data-type="all"].active  { border-color: #0A7D6A; background: linear-gradient(135deg, #D8FBF7, #D3E0E9); }
-    .stat-btn[data-type="big"].active  { border-color: #FF6B42; background: linear-gradient(135deg, #FFF5F0, #FFE9F0); }
+    .stat-btn[data-type="all"].active { border-color: #0A7D6A; background: linear-gradient(135deg, #D8FBF7, #D3E0E9); }
+    .stat-btn[data-type="big"].active { border-color: #FF6B42; background: linear-gradient(135deg, #FFF5F0, #FFE9F0); }
     .stat-btn[data-type="small"].active { border-color: #4A90E2; background: linear-gradient(135deg, #F0F7FF, #E6F3FF); }
     .stat-btn[data-type="special"].active { border-color: #9B59B6; background: linear-gradient(135deg, #F8F0FF, #FFE9F0); }
 
@@ -354,15 +355,15 @@
       transition: all 0.3s ease;
     }
 
-    .month-badge.big     { border-color: #FF6B42; background: linear-gradient(135deg, #FFF5F0, #FFE9F0); }
-    .month-badge.small   { border-color: #4A90E2; background: linear-gradient(135deg, #F0F7FF, #E6F3FF); }
+    .month-badge.big { border-color: #FF6B42; background: linear-gradient(135deg, #FFF5F0, #FFE9F0); }
+    .month-badge.small { border-color: #4A90E2; background: linear-gradient(135deg, #F0F7FF, #E6F3FF); }
     .month-badge.special { border-color: #9B59B6; background: linear-gradient(135deg, #F8F0FF, #FFE9F0); }
 
     .month-badge-name { font-size: 1.3rem; font-weight: 700; color: #0D2622; margin-bottom: 0.3rem; }
     .month-badge-days { font-size: 1rem; color: #60A09A; font-weight: 600; }
 
     .stat-number { font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .stat-label  { font-size: 1rem; color: #60A09A; font-weight: 600; }
+    .stat-label { font-size: 1rem; color: #60A09A; font-weight: 600; }
 
     .discovery-box {
       background: linear-gradient(135deg, #FFF5E6, #FFE9F0);
@@ -373,28 +374,19 @@
     }
 
     .discovery-title { font-size: 1.3rem; font-weight: 700; color: #FF6B42; margin-bottom: 1rem; }
-    .discovery-list  { list-style: none; padding: 0; }
-    .discovery-list li {
-      font-size: 1.1rem;
-      color: #0D2622;
-      margin-bottom: 0.8rem;
-      padding-left: 1.5rem;
-      position: relative;
-    }
+    .discovery-list { list-style: none; padding: 0; }
+    .discovery-list li { font-size: 1.1rem; color: #0D2622; margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative; }
     .discovery-list li::before { content: '✨'; position: absolute; left: 0; }
 
     @media (max-width: 768px) {
       .title { font-size: 1.8rem; }
-      .calendar-table th,
-      .calendar-table td { padding: 0.8rem 0.5rem; font-size: 0.9rem; }
+      .calendar-table th, .calendar-table td { padding: 0.8rem 0.5rem; font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-
-    <!-- 标题 -->
     <div class="header">
       <div class="title">
         <span>📅</span>
@@ -404,7 +396,6 @@
       <div class="subtitle">观察 2013 年到 2028 年每个月的天数，发现大月、小月和特殊月的规律</div>
     </div>
 
-    <!-- 筛选按钮 -->
     <div class="filter-panel">
       <button class="filter-btn" id="filter31" data-days="31">
         <span>📅</span> 31天月份
@@ -417,20 +408,17 @@
       </button>
     </div>
 
-    <!-- 日历表格 -->
     <div class="calendar-table-container">
       <div class="table-wrapper">
         <table class="calendar-table" id="calendarTable"></table>
       </div>
     </div>
 
-    <!-- 信息面板（点击格子弹出） -->
     <div class="info-panel" id="infoPanel">
       <div class="info-title" id="infoTitle"></div>
-      <div id="infoContent" class="text-lg leading-relaxed text-gray-700"></div>
+      <div id="infoContent" style="font-size:1.1rem;line-height:1.8;color:#374151;"></div>
     </div>
 
-    <!-- 统计面板 -->
     <div class="stats-panel">
       <div class="stats-grid">
         <button class="stat-card stat-btn" data-type="all">
@@ -457,7 +445,6 @@
       </div>
     </div>
 
-    <!-- 探究小发现 -->
     <div class="discovery-box">
       <div class="discovery-title">🔍 探究小发现</div>
       <ul class="discovery-list">
@@ -469,7 +456,6 @@
         <li><strong>闰年规律：</strong>通常每4年有一个闰年（年份能被4整除但不能被100整除，或者能被400整除）。</li>
       </ul>
     </div>
-
   </div>
 
   <script>
@@ -503,11 +489,12 @@
       const table = document.getElementById('calendarTable');
       let html = '<thead><tr><th>年份</th>';
       monthsData.forEach(m => html += `<th>${m.name}</th>`);
-      html += '<th>年总天数</th></tr></thead><tbody>';
+      html += '<th>年总天数</th><th>平年/闰年</th></tr></thead><tbody>';
 
       years.forEach(year => {
         html += `<tr><td class="year-cell">${year}年</td>`;
         let yearTotal = 0;
+        const leap = isLeapYear(year);
         monthsData.forEach((month, idx) => {
           const days = getMonthDays(year, idx);
           yearTotal += days;
@@ -521,13 +508,12 @@
           html += `<td class="${cls}" data-year="${year}" data-month="${month.name}" data-info="${month.info}" data-days="${days}">${days}</td>`;
         });
         html += `<td class="total-cell" data-total="${yearTotal}" data-year="${year}">?</td>`;
+        html += `<td class="type-cell" data-year="${year}" data-leap="${leap}">?</td>`;
         html += '</tr>';
       });
-
       html += '</tbody>';
       table.innerHTML = html;
 
-      // 月份格子点击
       document.querySelectorAll('.day-cell').forEach(cell => {
         cell.addEventListener('click', function () {
           const { year, month, info, days } = this.dataset;
@@ -540,22 +526,40 @@
         });
       });
 
-      // 年总天数格子点击
       document.querySelectorAll('.total-cell').forEach(cell => {
         cell.addEventListener('click', function () {
           const total = this.dataset.total;
-          const year  = this.dataset.year;
+          const year = this.dataset.year;
           this.textContent = total;
           this.classList.add('calculated');
           if (total === '366') this.classList.add('leap-year-total');
-
           const panel = document.getElementById('infoPanel');
           document.getElementById('infoTitle').innerHTML = `📊 ${year}年的总天数`;
           document.getElementById('infoContent').textContent =
             `${year}年一共有 ${total} 天。${isLeapYear(parseInt(year)) ? '因为这一年是闰年，2月有29天，所以全年比平年多1天。' : '这一年是平年，全年有365天。'}`;
           panel.classList.add('show');
-
           anime({ targets: this, scale: [1, 1.2, 1], duration: 500, easing: 'easeOutBack' });
+        });
+      });
+
+      document.querySelectorAll('.type-cell').forEach(cell => {
+        cell.addEventListener('click', function () {
+          const isLeap = this.dataset.leap === 'true';
+          const year = this.dataset.year;
+          this.textContent = isLeap ? '闰年' : '平年';
+          this.classList.add('revealed');
+          this.classList.add(isLeap ? 'leap-year' : 'common-year');
+          const panel = document.getElementById('infoPanel');
+          document.getElementById('infoTitle').innerHTML = `🔍 ${year}年的类型`;
+          let explanation = '';
+          if (isLeap) {
+            explanation = `${year}年是闰年。判断方法：${year} 能被 4 整除（${year} ÷ 4 = ${year / 4}），所以 2 月有 29 天，全年 366 天。`;
+          } else {
+            explanation = `${year}年是平年。判断方法：${year} 不能被 4 整除，所以 2 月只有 28 天，全年 365 天。`;
+          }
+          document.getElementById('infoContent').textContent = explanation;
+          panel.classList.add('show');
+          anime({ targets: this, rotateY: '1turn', duration: 600, easing: 'easeInOutQuad' });
         });
       });
     }
@@ -563,7 +567,7 @@
     function setupFilters() {
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', function () {
-          const days   = this.dataset.days;
+          const days = this.dataset.days;
           const active = this.classList.toggle('active');
           document.querySelectorAll('.day-cell').forEach(cell => {
             const d = cell.dataset.days;
@@ -580,22 +584,17 @@
     }
 
     const categories = {
-      all:     monthsData.map(m => ({ ...m, days: m.name === '2月' ? '28/29' : m.days })),
-      big:     monthsData.filter(m => m.type === 'big'),
-      small:   monthsData.filter(m => m.type === 'small'),
+      all: monthsData.map(m => ({ ...m, days: m.name === '2月' ? '28/29' : m.days })),
+      big: monthsData.filter(m => m.type === 'big'),
+      small: monthsData.filter(m => m.type === 'small'),
       special: monthsData.filter(m => m.type === 'feb').map(m => ({ ...m, days: '28/29' }))
     };
 
     function setupStats() {
-      const btns   = document.querySelectorAll('.stat-btn');
-      const title  = document.getElementById('monthsTitle');
-      const grid   = document.getElementById('monthsGrid');
-      const labels = {
-        all:     '一年的12个月',
-        big:     '大月（31天）',
-        small:   '小月（30天）',
-        special: '特殊月（2月）'
-      };
+      const btns = document.querySelectorAll('.stat-btn');
+      const title = document.getElementById('monthsTitle');
+      const grid = document.getElementById('monthsGrid');
+      const labels = { all: '一年的12个月', big: '大月（31天）', small: '小月（30天）', special: '特殊月（2月）' };
 
       btns.forEach(btn => {
         btn.addEventListener('click', function () {
@@ -618,18 +617,15 @@
       });
     }
 
-    // 初始化
     renderTable();
     setupFilters();
     setupStats();
 
-    // 入场动画
     anime.timeline()
-      .add({ targets: '.header',                    opacity: [0, 1], translateY: [-30, 0], duration: 800, easing: 'easeOutExpo' })
-      .add({ targets: '.filter-panel',              opacity: [0, 1], translateY: [-20, 0], duration: 600, easing: 'easeOutExpo' }, '-=400')
-      .add({ targets: '.calendar-table-container',  opacity: [0, 1], scale: [0.95, 1],    duration: 600, easing: 'easeOutExpo' }, '-=200')
-      .add({ targets: '.stats-panel',               opacity: [0, 1], translateY: [20, 0],  duration: 600, easing: 'easeOutExpo' }, '-=200');
+      .add({ targets: '.header', opacity: [0, 1], translateY: [-30, 0], duration: 800, easing: 'easeOutExpo' })
+      .add({ targets: '.filter-panel', opacity: [0, 1], translateY: [-20, 0], duration: 600, easing: 'easeOutExpo' }, '-=400')
+      .add({ targets: '.calendar-table-container', opacity: [0, 1], scale: [0.95, 1], duration: 600, easing: 'easeOutExpo' }, '-=200')
+      .add({ targets: '.stats-panel', opacity: [0, 1], translateY: [20, 0], duration: 600, easing: 'easeOutExpo' }, '-=200');
   </script>
-
 </body>
 </html>
